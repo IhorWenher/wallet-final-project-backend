@@ -1,43 +1,41 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 
-const transactionSchema = Schema({
-  date: {
-    type: String,
-    required: true,
-  },
-  type: {
-    type: String,
-    required: true,
-  },
-  category: {
-    type: String,
-    required: true,
-  },
-  comment: {
-    type: String,
-  },
-  sum: {
+const transactionSchema = Schema(
+  {
+    type: {
+      type: String,
+      required: true,
+    },
+    category: {
+      type: String,
+      required: true,
+    },
+    comment: {
+      type: String,
+    },
+    sum: {
+      type: Number,
+      required: true,
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+    },
+    /* balance: {
     type: Number,
-    required: true,
+    }, */
   },
-  balance: {
-    type: Number,
-  },
-});
+  { versionKey: false, timestamp: true }
+);
 
 const joiSchema = Joi.object({
-  date: Joi.string().required(),
-  type: Joi.string().email().required(),
+  type: Joi.string().required(),
   category: Joi.string().required(),
   comment: Joi.string(),
   sum: Joi.number().required(),
-  balance: Joi.number().required(),
 });
 
-const Transaction = model("contact", transactionSchema);
+const Transaction = model("transaction", transactionSchema);
 
-module.export = {
-  Transaction,
-  joiSchema,
-};
+module.export = { Transaction, joiSchema };
