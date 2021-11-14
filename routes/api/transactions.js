@@ -1,0 +1,15 @@
+const express = require("express");
+
+const {
+  controllerWrapper,
+  validation,
+  authenticate,
+} = require("../../middlewares");
+const { joiSchema } = require("../../models/transaction");
+const { transactions: ctrl } = require("../../controllers");
+
+const router = express.Router();
+
+router.get("/", authenticate, controllerWrapper(ctrl.getAll));
+
+module.exports = router;
