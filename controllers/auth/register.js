@@ -4,7 +4,6 @@ const bcrypt = require("bcryptjs");
 const { nanoid } = require("nanoid");
 
 const { User } = require("../../models");
-const { sendEmail } = require("../../helpers");
 
 const register = async (req, res, next) => {
   try {
@@ -34,14 +33,6 @@ const register = async (req, res, next) => {
       verificationToken,
     });
 
-    const mail = {
-      to: email,
-      subject: "Підтвердження реєстрації на сайті",
-      html: `<a target="_blank" href="http://localhost:3000/api/users/verify/${verificationToken}">Натисніть для підтвердження email</a>`,
-    };
-
-    sendEmail(mail);
-
     res.status(201).json({
       status: "success",
       code: 201,
@@ -50,7 +41,6 @@ const register = async (req, res, next) => {
         email,
         name,
         verificationToken,
-        subscription: subscr,
         _id,
       },
     });

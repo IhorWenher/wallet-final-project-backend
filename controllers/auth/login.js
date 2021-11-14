@@ -22,11 +22,6 @@ const login = async (req, res, next) => {
       throw new Unauthorized(`Email ${email} not found`);
     }
 
-    const userName = await User.findOne({ name });
-    if (!userName) {
-      throw new Unauthorized(`Name ${userName} not found`);
-    }
-
     const isCorrectPassword = bcrypt.compareSync(password, user.password);
     if (!isCorrectPassword) {
       throw new Unauthorized(`Password is wrong`);
@@ -47,7 +42,6 @@ const login = async (req, res, next) => {
         token,
         user: {
           email,
-          name,
         },
       },
     });
