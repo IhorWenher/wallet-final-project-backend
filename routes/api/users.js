@@ -5,11 +5,7 @@ const { users: ctrl } = require("../../controllers");
 const router = express.Router();
 
 router.get("/current", authenticate, controllerWrapper(ctrl.getCurrent));
-router.patch(
-  "/current",
-  authenticate,
-  controllerWrapper(ctrl.updateSubscription)
-);
+router.patch("/current", authenticate);
 
 router.get("/verify/:verificationToken", controllerWrapper(ctrl.verify));
 
