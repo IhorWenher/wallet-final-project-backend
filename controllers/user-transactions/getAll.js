@@ -1,8 +1,4 @@
-// const { NotFound, BadRequest } = require("http-errors");
-
-// const { joiSchema } = require("../models/transaction");
-
-const { Transaction } = require("../models");
+const { Transaction } = require("../../models");
 
 const getAll = async (req, res, next) => {
   const allContacts = await Transaction.find({}, "_id name email");
@@ -15,6 +11,4 @@ const getAll = async (req, res, next) => {
   });
 };
 
-module.exports = {
-  getAll,
-};
+module.exports = getAll;

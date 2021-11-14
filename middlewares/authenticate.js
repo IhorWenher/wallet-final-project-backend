@@ -5,26 +5,26 @@ const { User } = require("../models");
 
 const { SECRET_KEY } = process.env;
 
-const authenticate = async (req, res, next) => {
+const authenticate = async (req, _, next) => {
+  const { authorization } = req.headers;
+  if (!authorization) {
+    throw new Unauthorized("Not authorized");
+  }
+  const [bearer, token] = authorization.split(" ");
+  if (bearer !== "Bearer") {
+    throw new Unauthorized("Invalid token");
+  }
+
   try {
-    const { authorization } = req.headers;
-    if (!authorization) {
-      throw new Unauthorized("Not authorized");
-    }
-    const [bearer, token] = authorization.split(" ");
-    if (bearer !== "Bearer") {
-      throw new Unauthorized("Not authorized");
-    }
     const { id } = jwt.verify(token, SECRET_KEY);
     const user = await User.findById(id);
     if (!user || !user.token) {
-      throw new Unauthorized("Not authorized");
+      throw new Unauthorized("Invalid token");
     }
     req.user = user;
     next();
   } catch (error) {
     error.status = 401;
-    error.message = "Not authorized";
     next(error);
   }
 };
