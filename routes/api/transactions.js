@@ -17,6 +17,13 @@ router.post(
   controllerWrapper(ctrl.add)
 );
 
+// router.post(
+//   "/",
+//   authenticate,
+//   validation(joiSchema),
+//   controllerWrapper(ctrl.add)
+// );
+
 router.get("/", authenticate, controllerWrapper(ctrl.getAll));
 
 module.exports = router;

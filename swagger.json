@@ -1,0 +1,287 @@
+{
+  "openapi": "3.0.2",
+
+  "info": {
+    "version": "1.0.0",
+    "title": "Wallet API Docs",
+    "description": "Showing off all Wallet APIs",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+
+  "servers": [{ "url": "http://localhost:3000" }, { "url": "https://heroku-wallet-app.herokuapp.com"}],
+
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Users",
+      "description": "Users endpoints"
+    },
+    {
+      "name": "Contacts",
+      "description": "Contacts endpoints"
+    }
+  ],
+
+  "paths": {
+
+    "/api/auth/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User Registration",
+        "parameters": [],
+        "security": [],
+        "requestBody": {
+          "description": "Registration Object",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegistrationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Succesfull Operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User Login",
+        "parameters": [],
+        "security": [],
+        "requestBody": {
+          "description": "Login Object",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Succesfull Operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    },
+
+    "/api/auth/logout": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "User Logout",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Succesfull Operation"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {}
+          }
+        }
+      }
+    }
+
+  },
+
+  "components": {
+    "schemas": {
+
+      "RegistrationRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's Name",
+            "example": "My Name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's Email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's Password",
+            "example": "password"
+          }
+        }
+      },
+
+      "RegistrationResponse": {
+        "type": "object",
+        "required": ["status", "code", "user"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "Status Code",
+            "example": "201"
+          },
+          "user": {
+            "type": "object",
+            "description": "User Data",
+            "properties": {
+              "email": {
+                "type": "string",
+                "description": "User Email",
+                "format": "email"
+              },
+              "name": {
+                "type": "string",
+                "description": "User Name",
+                "example": "My Name"
+              },
+              "token": {
+                "type": "string",
+                "description": "Authorization Token"
+              }
+            }
+          }
+        }
+      },
+
+      "TempResponse": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string",
+              "description": "User's email",
+              "format": "email"
+            },
+            "userId": {
+              "type": "number",
+              "description": "User's id",
+              "example": "32143232436545474"
+            }
+          }
+        },
+        "example": [
+          { "email": "1@gmail.com", "userId": "1" },
+          { "email": "2@gmail.com", "userId": "2" }
+        ]
+      },
+
+      "LoginRequest": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "example": "password"
+          }
+        }
+      },
+
+      "LoginResponse": {
+        "type": "object",
+        "required": ["status", "code", "data"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "success"
+          },
+          "code": {
+            "type": "string",
+            "description": "Status Code",
+            "example": "200"
+          },
+          "data": {
+            "type": "object",
+            "description": "Response Data",
+            "properties": {
+              "token": {
+                "type": "string",
+                "description": "Authorization Token"
+              },
+              "user": {
+                "type": "object",
+                "description": "User Data"
+              }
+            }
+          }
+        }
+      }
+
+    },
+
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
