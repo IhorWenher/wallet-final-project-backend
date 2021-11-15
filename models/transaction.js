@@ -18,13 +18,14 @@ const transactionSchema = Schema(
       type: Number,
       required: true,
     },
+    balance: {
+      type: Number,
+      required: true,
+    },
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
     },
-    /* balance: {
-    type: Number,
-    }, */
   },
   { versionKey: false, timestamp: true }
 );
@@ -34,6 +35,7 @@ const joiSchema = Joi.object({
   category: Joi.string().required(),
   comment: Joi.string(),
   sum: Joi.number().required(),
+  balance: Joi.number().required(),
 });
 
 const Transaction = model("transaction", transactionSchema);
