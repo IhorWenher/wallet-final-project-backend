@@ -22,6 +22,10 @@ const userSchema = Schema(
       type: String,
       default: null,
     },
+    balance: {
+      type: Number,
+      required: true,
+    },
   },
   { versionKey: false, timestamps: true }
 );
@@ -40,9 +44,14 @@ const joiSchema = Joi.object({
   password: Joi.string().required(),
 });
 
+const joiBalanceSchema = Joi.object({
+  balance: Joi.number().required(), //дописати перевірку
+});
+
 const User = model("user", userSchema);
 
 module.exports = {
   User,
   joiSchema,
+  joiBalanceSchema,
 };
