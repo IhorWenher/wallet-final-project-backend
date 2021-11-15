@@ -4,6 +4,7 @@ const cors = require("cors");
 
 const authRouter = require("./routes/api/auth");
 const transactiosRouter = require("./routes/api/transactions");
+const usersRouter = require("./routes/api/users");
 const docsRouter = require("./routes/api/docs");
 
 const app = express();
@@ -17,6 +18,7 @@ app.use(express.static("public"));
 
 app.use("/api/auth", authRouter);
 app.use("/api/transactions", transactiosRouter);
+app.use("/api/users", usersRouter);
 app.use("/api/docs", docsRouter);
 
 app.use((req, res) => {
@@ -28,3 +30,5 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+
+// Ihor oyXKtkc2dbwS7yqs
