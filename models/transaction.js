@@ -38,4 +38,4 @@ const joiSchema = Joi.object({
 
 const Transaction = model("transaction", transactionSchema);
 
-module.export = { Transaction, joiSchema };
+module.exports = { Transaction, joiSchema };
