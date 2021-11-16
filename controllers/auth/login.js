@@ -1,53 +1,34 @@
-const { BadRequest, Unauthorized } = require("http-errors");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+const { Unauthorized, InternalServerError } = require('http-errors')
+const jwt = require('jsonwebtoken')
+const { User } = require('../../models')
 
-const { joiSchema } = require("../../models/user");
-
-const { User } = require("../../models");
-
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY } = process.env
 
 const login = async (req, res, next) => {
-  try {
-    const { error } = joiSchema.validate(req.body);
-    const { email, name, password } = req.body;
+  const { email, password } = req.body
+  let userData = await User.findOne({ email })
 
-    if (error) {
-      throw new BadRequest(error.message);
+  if (!(userData && userData.comparePassword(password))) throw new Unauthorized('Email or password is wrong')
+
+  const payload = { id: userData._id }
+  const token = jwt.sign(payload, SECRET_KEY)
+
+  userData = await User.findByIdAndUpdate(userData._id, { token }, { new: true })
+
+  if (!userData) throw new InternalServerError('Server error')
+
+  res.status(200).json({
+    status: 'User logged in',
+    code: 200,
+    data: {
+      token,
+      user: {
+        name: userData.name,
+        email: userData.email,
+        balance: userData.balance
+      }
     }
+  })
+}
 
-    const user = await User.findOne({ email });
-    if (!user) {
-      throw new Unauthorized(`Email ${email} not found`);
-    }
-
-    const isCorrectPassword = bcrypt.compareSync(password, user.password);
-    if (!isCorrectPassword) {
-      throw new Unauthorized(`Password is wrong`);
-    }
-
-    const payload = {
-      id: user._id,
-    };
-
-    const token = jwt.sign(payload, SECRET_KEY);
-
-    await User.findByIdAndUpdate(user._id, { token });
-
-    res.json({
-      status: "success",
-      code: 200,
-      data: {
-        token,
-        user: {
-          email,
-        },
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-module.exports = login;
+module.exports = login

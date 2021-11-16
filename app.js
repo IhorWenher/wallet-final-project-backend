@@ -22,11 +22,21 @@ app.use("/api/users", usersRouter);
 app.use("/api/docs", docsRouter);
 
 app.use((req, res) => {
-  res.status(404).json({ message: "Not found" });
+  res.status(404).json({
+    status: 'Error',
+    code: 404,
+    message: 'Not found'
+  })
 });
 
 app.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  const { status = 500, message = 'Server error' } = err
+  // res.status(500).json({ message: err.message })
+  res.status(status).json({
+    status: 'Error',
+    code: status,
+    message
+  })
 });
 
 module.exports = app;
