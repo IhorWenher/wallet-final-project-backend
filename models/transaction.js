@@ -1,10 +1,23 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
+const { boolean } = require("joi");
 
 const transactionSchema = Schema(
   {
+    day: {
+      type: Number,
+      required: true,
+    },
+    month: {
+      type: Number,
+      required: true,
+    },
+    year: {
+      type: Number,
+      required: true,
+    },
     type: {
-      type: String,
+      type: Boolean,
       required: true,
     },
     category: {
@@ -31,7 +44,10 @@ const transactionSchema = Schema(
 );
 
 const joiSchema = Joi.object({
-  type: Joi.string().required(),
+  day: Joi.number().integer().positive().max(31).required(),
+  month: Joi.number().integer().positive().max(12).required(),
+  year: Joi.number().integer().positive().min(2021).max(2023).required(),
+  type: Joi.boolean().required(),
   category: Joi.string().required(),
   comment: Joi.string(),
   sum: Joi.number().required(),
