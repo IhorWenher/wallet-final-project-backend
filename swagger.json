@@ -14,7 +14,10 @@
   "consumes": ["application/json"],
   "produces": ["application/json"],
 
-  "servers": [{ "url": "http://localhost:3000" }, { "url": "https://heroku-wallet-app.herokuapp.com"}],
+  "servers": [
+    { "url": "https://final-project-back.herokuapp.com"},
+    { "url": "http://localhost:3000" }
+  ],
 
   "tags": [
     {
@@ -36,11 +39,11 @@
     "/api/auth/register": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User Registration",
+        "summary": "User registration",
         "parameters": [],
         "security": [],
         "requestBody": {
-          "description": "Registration Object",
+          "description": "Registration object",
           "required": "true",
           "content": {
             "application/json": {
@@ -56,22 +59,40 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/RegistrationResponse"
+                  "$ref": "#/components/schemas/RegistrationResponse201"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationLoginError400"
+                }
+              }
+            }
           },
           "409": {
             "description": "Conflict",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationError409"
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal Server Error",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError500"
+                }
+              }
+            }
           }
         }
       }
@@ -80,11 +101,11 @@
     "/api/auth/login": {
       "post": {
         "tags": ["Auth"],
-        "summary": "User Login",
+        "summary": "User login",
         "parameters": [],
         "security": [],
         "requestBody": {
-          "description": "Login Object",
+          "description": "Login object",
           "required": "true",
           "content": {
             "application/json": {
@@ -100,22 +121,40 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LoginResponse"
+                  "$ref": "#/components/schemas/LoginResponse200"
                 }
               }
             }
           },
           "400": {
             "description": "Bad Request",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistrationLoginError400"
+                }
+              }
+            }
           },
           "401": {
             "description": "Unauthorized",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginError401"
+                }
+              }
+            }
           },
           "500": {
             "description": "Internal Server Error",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError500"
+                }
+              }
+            }
           }
         }
       }
@@ -131,9 +170,25 @@
           "204": {
             "description": "Succesfull Operation"
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutError401"
+                }
+              }
+            }
+          },
           "500": {
             "description": "Internal Server Error",
-            "content": {}
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError500"
+                }
+              }
+            }
           }
         }
       }
@@ -150,80 +205,107 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "User's Name",
-            "example": "My Name"
+            "description": "User name",
+            "example": "John Doe"
           },
           "email": {
             "type": "string",
-            "description": "User's Email",
+            "description": "User email",
             "format": "email"
           },
           "password": {
             "type": "string",
-            "description": "User's Password",
+            "description": "User Password",
             "example": "password"
           }
         }
       },
 
-      "RegistrationResponse": {
+      "RegistrationResponse201": {
         "type": "object",
-        "required": ["status", "code", "user"],
+        "required": ["status", "code", "data"],
         "properties": {
           "status": {
             "type": "string",
             "description": "Operation status",
-            "example": "success"
+            "example": "User registered"
           },
           "code": {
-            "type": "string",
-            "description": "Status Code",
-            "example": "201"
+            "type": "number",
+            "description": "Status code",
+            "example": 201
           },
-          "user": {
+          "data": {
             "type": "object",
-            "description": "User Data",
+            "description": "Response data",
             "properties": {
-              "email": {
-                "type": "string",
-                "description": "User Email",
-                "format": "email"
-              },
-              "name": {
-                "type": "string",
-                "description": "User Name",
-                "example": "My Name"
-              },
-              "token": {
-                "type": "string",
-                "description": "Authorization Token"
+              "user": {
+                "type": "object",
+                "description": "User data",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User name",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User email",
+                    "format": "email"
+                  },
+                  "balance": {
+                    "type": "number",
+                    "description": "User balance"
+                  }
+                }
               }
             }
           }
         }
       },
 
-      "TempResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "email": {
-              "type": "string",
-              "description": "User's email",
-              "format": "email"
-            },
-            "userId": {
-              "type": "number",
-              "description": "User's id",
-              "example": "32143232436545474"
-            }
+      "RegistrationLoginError400": {
+        "type": "object",
+        "required": ["status", "code", "message"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "Bad parameters"
+          },
+          "code": {
+            "type": "number",
+            "description": "Status code",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "description": "Response description",
+            "example": "\"email\" is required"
           }
-        },
-        "example": [
-          { "email": "1@gmail.com", "userId": "1" },
-          { "email": "2@gmail.com", "userId": "2" }
-        ]
+        }
+      },
+
+      "RegistrationError409": {
+        "type": "object",
+        "required": ["status", "code", "message"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "Error"
+          },
+          "code": {
+            "type": "number",
+            "description": "Status code",
+            "example": 409
+          },
+          "message": {
+            "type": "string",
+            "description": "Response description",
+            "example": "Email in use"
+          }
+        }
       },
 
       "LoginRequest": {
@@ -232,44 +314,127 @@
         "properties": {
           "email": {
             "type": "string",
-            "description": "User's email",
+            "description": "User email",
             "format": "email"
           },
           "password": {
             "type": "string",
-            "description": "User's password",
+            "description": "User password",
             "example": "password"
           }
         }
       },
 
-      "LoginResponse": {
+      "LoginResponse200": {
         "type": "object",
         "required": ["status", "code", "data"],
         "properties": {
           "status": {
             "type": "string",
             "description": "Operation status",
-            "example": "success"
+            "example": "User logged in"
           },
           "code": {
-            "type": "string",
-            "description": "Status Code",
-            "example": "200"
+            "type": "number",
+            "description": "Status code",
+            "example": 200
           },
           "data": {
             "type": "object",
-            "description": "Response Data",
+            "description": "Response data",
             "properties": {
               "token": {
                 "type": "string",
-                "description": "Authorization Token"
+                "description": "Authorization token",
+                "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxOTM5ZTYzOGE5N2UyZGE5ZGJlZDkyYyIsImlhdCI6MTYzNzA2NzcwNn0.zSESkfGn2d-lz4WFNnUmWh3rZSoA0zEPR9CYb2Cw7N8"
               },
               "user": {
                 "type": "object",
-                "description": "User Data"
+                "description": "User data",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "User name",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "description": "User email",
+                    "format": "email"
+                  },
+                  "balance": {
+                    "type": "number",
+                    "description": "User balance"
+                  }
+                }
               }
             }
+          }
+        }
+      },
+
+      "LoginError401": {
+        "type": "object",
+        "required": ["status", "code", "message"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "Error"
+          },
+          "code": {
+            "type": "number",
+            "description": "Status code",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "description": "Response description",
+            "example": "Email or password is wrong"
+          }
+        }
+      },
+
+      "LogoutError401": {
+        "type": "object",
+        "required": ["status", "code", "message"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "Error"
+          },
+          "code": {
+            "type": "number",
+            "description": "Status code",
+            "example": 401
+          },
+          "message": {
+            "type": "string",
+            "description": "Response description",
+            "example": "Invalid token"
+          }
+        }
+      },
+
+      "InternalServerError500": {
+        "type": "object",
+        "required": ["status", "code", "message"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "Error"
+          },
+          "code": {
+            "type": "number",
+            "description": "Status code",
+            "example": 500
+          },
+          "message": {
+            "type": "string",
+            "description": "Response description",
+            "example": "Server error"
           }
         }
       }
