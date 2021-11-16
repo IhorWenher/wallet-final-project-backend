@@ -38,20 +38,26 @@ userSchema.methods.comparePassword = function (password) {
   return bcrypt.compareSync(password, this.password);
 };
 
-const joiSchema = Joi.object({
-  name: Joi.string(),
+const joiRegistrationSchema = Joi.object({
+  name: Joi.string().required(),
+  email: Joi.string().required(),
+  password: Joi.string().required(),
+});
+
+const joiLoginSchema = Joi.object({
   email: Joi.string().required(),
   password: Joi.string().required(),
 });
 
 const joiBalanceSchema = Joi.object({
-  balance: Joi.number().required(), //дописати перевірку
+  balance: Joi.number().precision(2).required().min(0).max(99999.99),
 });
 
 const User = model("user", userSchema);
 
 module.exports = {
   User,
-  joiSchema,
+  joiRegistrationSchema,
+  joiLoginSchema,
   joiBalanceSchema,
 };
