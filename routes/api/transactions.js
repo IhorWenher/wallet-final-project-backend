@@ -26,4 +26,6 @@ router.post(
 
 router.get("/", authenticate, controllerWrapper(ctrl.getAll));
 
+router.get("/", authenticate, controllerWrapper(ctrl.getStatisticData));
+
 module.exports = router;
