@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
 
   "info": {
-    "version": "1.0.0",
+    "version": "1.1.0",
     "title": "Wallet API Docs",
     "description": "Showing off all Wallet APIs",
     "license": {
@@ -29,8 +29,8 @@
       "description": "Users endpoints"
     },
     {
-      "name": "Contacts",
-      "description": "Contacts endpoints"
+      "name": "Transactions",
+      "description": "Transactions endpoints"
     }
   ],
 
@@ -141,7 +141,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LoginError401"
+                  "$ref": "#/components/schemas/Error401"
                 }
               }
             }
@@ -168,14 +168,105 @@
         "security": [{ "Bearer": [] }],
         "responses": {
           "204": {
-            "description": "Succesfull Operation"
+            "description": "Succesfull operation"
           },
           "401": {
             "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LogoutError401"
+                  "$ref": "#/components/schemas/Error401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/users/balance": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "User Balance",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Balance retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetBalanceResponse200"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError500"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "patch": {
+        "tags": ["Users"],
+        "summary": "User Balance",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Balance object",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBalanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Balance retrieved",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateBalanceResponse200"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error401"
                 }
               }
             }
@@ -255,7 +346,8 @@
                   },
                   "balance": {
                     "type": "number",
-                    "description": "User balance"
+                    "description": "User balance",
+                    "example": 123.45
                   }
                 }
               }
@@ -364,7 +456,8 @@
                   },
                   "balance": {
                     "type": "number",
-                    "description": "User balance"
+                    "description": "User balance",
+                    "example": 123.45
                   }
                 }
               }
@@ -373,29 +466,87 @@
         }
       },
 
-      "LoginError401": {
+      "GetBalanceResponse200": {
         "type": "object",
-        "required": ["status", "code", "message"],
+        "required": ["status", "code", "data"],
         "properties": {
           "status": {
             "type": "string",
             "description": "Operation status",
-            "example": "Error"
+            "example": "Balance retrieved"
           },
           "code": {
             "type": "number",
             "description": "Status code",
-            "example": 401
+            "example": 200
           },
-          "message": {
-            "type": "string",
-            "description": "Response description",
-            "example": "Email or password is wrong"
+          "data": {
+            "type": "object",
+            "description": "Response data",
+            "properties": {
+              "user": {
+                "type": "object",
+                "description": "User data",
+                "properties": {
+                  "balance": {
+                    "type": "number",
+                    "description": "User balance",
+                    "example": 123.45
+                  }
+                }
+              }
+            }
           }
         }
       },
 
-      "LogoutError401": {
+      "UpdateBalanceRequest": {
+        "type": "object",
+        "required": ["balance"],
+        "properties": {
+          "balance": {
+            "type": "number",
+            "description": "User balance",
+            "example": 456.78
+          }
+        }
+      },
+
+      "UpdateBalanceResponse200": {
+        "type": "object",
+        "required": ["status", "code", "data"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "Balance updated"
+          },
+          "code": {
+            "type": "number",
+            "description": "Status code",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "description": "Response data",
+            "properties": {
+              "user": {
+                "type": "object",
+                "description": "User data",
+                "properties": {
+                  "balance": {
+                    "type": "number",
+                    "description": "User balance",
+                    "example": 678.90
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "Error401": {
         "type": "object",
         "required": ["status", "code", "message"],
         "properties": {
