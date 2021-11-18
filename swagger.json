@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
 
   "info": {
-    "version": "1.1.0",
+    "version": "1.2.0",
     "title": "Wallet API Docs",
     "description": "Showing off all Wallet APIs",
     "license": {
@@ -257,6 +257,97 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UpdateBalanceResponse200"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/transactions": {
+      "get": {
+        "tags": ["Transactions"],
+        "summary": "Get all transactions",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Succesfull Operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetAllTransactionsResponse200"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error401"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InternalServerError500"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "post": {
+        "tags": ["Transactions"],
+        "summary": "Add transaction",
+        "parameters": [],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Transaction object",
+          "required": "true",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AddTransactionRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Succesfull Operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AddTransactionResponse200"
                 }
               }
             }
@@ -538,6 +629,195 @@
                     "type": "number",
                     "description": "User balance",
                     "example": 678.90
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "GetAllTransactionsResponse200": {
+        "type": "object",
+        "required": ["status", "code", "data"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "Transactions retrieved"
+          },
+          "code": {
+            "type": "number",
+            "description": "Status code",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "description": "Response data",
+            "properties": {
+              "transactionsData": {
+                "type": "array",
+                "description": "Array of transaction objects",
+                "items": {
+                  "type": "object",
+                  "description": "Transaction data",
+                  "properties": {
+                    "day": {
+                      "type": "number",
+                      "description": "Day",
+                      "example": 18
+                    },
+                    "month": {
+                      "type": "number",
+                      "description": "Month",
+                      "example": 11
+                    },
+                    "year": {
+                      "type": "number",
+                      "description": "Month",
+                      "example": 2021
+                    },
+                    "type": {
+                      "type": "boolean",
+                      "description": "Type",
+                      "example": true
+                    },
+                    "category": {
+                      "type": "string",
+                      "description": "Category",
+                      "example": "Машина"
+                    },
+                    "comment": {
+                      "type": "string",
+                      "description": "Comment",
+                      "example": "Бензин"
+                    },
+                    "sum": {
+                      "type": "number",
+                      "description": "Sum",
+                      "example": 1234
+                    },
+                    "balance": {
+                      "type": "number",
+                      "description": "Balance",
+                      "example": 56789
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "AddTransactionRequest": {
+        "type": "object",
+        "required": ["day", "month", "year", "type", "category", "sum", "balance"],
+        "properties": {
+          "day": {
+            "type": "number",
+            "description": "Day",
+            "example": 18
+          },
+          "month": {
+            "type": "number",
+            "description": "Month",
+            "example": 11
+          },
+          "year": {
+            "type": "number",
+            "description": "Month",
+            "example": 2021
+          },
+          "type": {
+            "type": "boolean",
+            "description": "Type",
+            "example": true
+          },
+          "category": {
+            "type": "string",
+            "description": "Category",
+            "example": "Машина"
+          },
+          "comment": {
+            "type": "string",
+            "description": "Comment",
+            "example": "Бензин"
+          },
+          "sum": {
+            "type": "number",
+            "description": "Sum",
+            "example": 1234
+          },
+          "balance": {
+            "type": "number",
+            "description": "Balance",
+            "example": 56789
+          }
+        }
+      },
+
+      "AddTransactionResponse200": {
+        "type": "object",
+        "required": ["status", "code", "data"],
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Operation status",
+            "example": "Transactions retrieved"
+          },
+          "code": {
+            "type": "number",
+            "description": "Status code",
+            "example": 200
+          },
+          "data": {
+            "type": "object",
+            "description": "Response data",
+            "properties": {
+              "transactionData": {
+                "type": "object",
+                "description": "Transaction data",
+                "properties": {
+                  "day": {
+                    "type": "number",
+                    "description": "Day",
+                    "example": 18
+                  },
+                  "month": {
+                    "type": "number",
+                    "description": "Month",
+                    "example": 11
+                  },
+                  "year": {
+                    "type": "number",
+                    "description": "Month",
+                    "example": 2021
+                  },
+                  "type": {
+                    "type": "boolean",
+                    "description": "Type",
+                    "example": true
+                  },
+                  "category": {
+                    "type": "string",
+                    "description": "Category",
+                    "example": "Машина"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "description": "Comment",
+                    "example": "Бензин"
+                  },
+                  "sum": {
+                    "type": "number",
+                    "description": "Sum",
+                    "example": 1234
+                  },
+                  "balance": {
+                    "type": "number",
+                    "description": "Balance",
+                    "example": 56789
                   }
                 }
               }
