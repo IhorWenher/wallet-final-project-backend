@@ -20,8 +20,8 @@ const register = async (req, res, next) => {
     code: 201,
     data: {
       user: {
-        name: userData.name,
         email: userData.email,
+        password: userData.password,
       },
     },
   });
