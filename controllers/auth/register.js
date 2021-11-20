@@ -22,7 +22,6 @@ const register = async (req, res, next) => {
       user: {
         name: userData.name,
         email: userData.email,
-        balance: userData.balance,
       },
     },
   });
