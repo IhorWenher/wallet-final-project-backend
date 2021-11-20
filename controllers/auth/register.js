@@ -1,8 +1,5 @@
 const { Conflict, InternalServerError } = require("http-errors");
 const { User } = require("../../models");
-const jwt = require("jsonwebtoken");
-
-const { SECRET_KEY } = process.env;
 
 const register = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -21,7 +18,7 @@ const register = async (req, res, next) => {
     data: {
       user: {
         email: userData.email,
-        password: userData.password,
+        password: password,
       },
     },
   });
