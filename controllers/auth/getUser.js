@@ -11,7 +11,6 @@ const getUser = async (req, res) => {
     data: {
       name: userData.name,
       email: userData.email,
-      balance: userData.balance,
     },
   });
 };
