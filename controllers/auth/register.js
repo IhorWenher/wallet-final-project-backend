@@ -12,9 +12,7 @@ const register = async (req, res, next) => {
 
   const newUser = new User({ name, email });
   newUser.setPassword(password);
-
   const userData = await newUser.save();
-
   if (!userData) throw new InternalServerError("Server error");
 
   res.status(201).json({
