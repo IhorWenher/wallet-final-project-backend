@@ -9,11 +9,9 @@ const getUser = async (req, res) => {
     status: "success",
     code: 200,
     data: {
-      user: {
-        name: userData.name,
-        email: userData.email,
-        balance: userData.balance,
-      },
+      name: userData.name,
+      email: userData.email,
+      balance: userData.balance,
     },
   });
 };
