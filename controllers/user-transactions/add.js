@@ -36,7 +36,7 @@ const add = async (req, res) => {
     year: transactionData.year,
     type: transactionData.type,
     category: transactionData.category,
-    comment: transactionData.comment,
+    comment: transactionData.comment ? transactionData.comment : "",
     sum: transactionData.sum,
     balance: newUserData.balance,
   };
