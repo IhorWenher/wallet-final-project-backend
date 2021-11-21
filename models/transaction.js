@@ -51,7 +51,7 @@ const joiSchema = Joi.object({
   type: Joi.boolean().required(),
   category: Joi.string().required(),
   comment: Joi.string(),
-  balance: Joi.string().required(),
+  balance: Joi.number().required(),
   sum: Joi.number().required(),
 });
 

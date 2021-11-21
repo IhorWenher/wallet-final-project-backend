@@ -7,7 +7,7 @@ const add = async (req, res) => {
 
   let newBalance = 0;
 
-  transactionData.type
+  req.body.type
     ? (newBalance = userData.balance + req.body.sum)
     : (newBalance = userData.balance - req.body.sum);
 
