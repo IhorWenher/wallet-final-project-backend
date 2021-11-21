@@ -28,7 +28,6 @@ const add = async (req, res) => {
     { balance: newBalance },
     { new: true }
   );
-
   if (!newUserData) throw new InternalServerError("Server error");
 
   transactionData = {
