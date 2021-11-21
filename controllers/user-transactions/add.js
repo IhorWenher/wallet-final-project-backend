@@ -31,6 +31,7 @@ const add = async (req, res) => {
   if (!newUserData) throw new InternalServerError("Server error");
 
   transactionData = {
+    id: transactionData._id,
     day: transactionData.day,
     month: transactionData.month,
     year: transactionData.year,
