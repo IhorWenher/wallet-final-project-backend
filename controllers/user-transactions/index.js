@@ -1,7 +1,7 @@
-const getAll = require("./getAll");
-const add = require("./add");
+const get = require("./get")
+const add = require("./add")
 
 module.exports = {
-  getAll,
-  add,
-};
+  get,
+  add
+}

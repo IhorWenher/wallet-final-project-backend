@@ -17,9 +17,6 @@ router.post(
   controllerWrapper(ctrl.add)
 );
 
-router.get("/",
-  authenticate,
-  controllerWrapper(ctrl.getAll)
-);
+router.get("/", authenticate, controllerWrapper(ctrl.get));
 
 module.exports = router;
