@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
 
   "info": {
-    "version": "1.2.0",
+    "version": "1.3.0",
     "title": "Wallet API Docs",
     "description": "Showing off all Wallet APIs",
     "license": {
@@ -285,19 +285,30 @@
       }
     },
 
-    "/api/transactions": {
-      "get": {
+    "/api/transactions/get": {
+      "post": {
         "tags": ["Transactions"],
-        "summary": "Get all transactions",
+        "summary": "Get transactions",
         "parameters": [],
         "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Transaction object",
+          "required": "",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GetTransactionsRequest"
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Succesfull Operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/GetAllTransactionsResponse200"
+                  "$ref": "#/components/schemas/GetTransactionsResponse200"
                 }
               }
             }
@@ -323,8 +334,10 @@
             }
           }
         }
-      },
+      }
+    },
 
+    "/api/transactions/add": {
       "post": {
         "tags": ["Transactions"],
         "summary": "Add transaction",
@@ -637,7 +650,24 @@
         }
       },
 
-      "GetAllTransactionsResponse200": {
+      "GetTransactionsRequest": {
+        "type": "object",
+        "required": ["month", "year"],
+        "properties": {
+          "month": {
+            "type": "number",
+            "description": "Day",
+            "example": 11
+          },
+          "year": {
+            "type": "number",
+            "description": "Month",
+            "example": 2021
+          }
+        }
+      },
+
+      "GetTransactionsResponse200": {
         "type": "object",
         "required": ["status", "code", "data"],
         "properties": {
@@ -662,6 +692,11 @@
                   "type": "object",
                   "description": "Transaction data",
                   "properties": {
+                    "id": {
+                      "type": "string",
+                      "description": "Id",
+                      "example": "619406c42ffc6e2d1d6afe4e"
+                    },
                     "day": {
                       "type": "number",
                       "description": "Day",
@@ -712,7 +747,7 @@
 
       "AddTransactionRequest": {
         "type": "object",
-        "required": ["day", "month", "year", "type", "category", "sum", "balance"],
+        "required": ["day", "month", "year", "type", "category", "sum"],
         "properties": {
           "day": {
             "type": "number",
@@ -726,13 +761,13 @@
           },
           "year": {
             "type": "number",
-            "description": "Month",
+            "description": "Year",
             "example": 2021
           },
           "type": {
             "type": "boolean",
             "description": "Type",
-            "example": true
+            "example": false
           },
           "category": {
             "type": "string",
@@ -748,11 +783,6 @@
             "type": "number",
             "description": "Sum",
             "example": 1234
-          },
-          "balance": {
-            "type": "number",
-            "description": "Balance",
-            "example": 56789
           }
         }
       },

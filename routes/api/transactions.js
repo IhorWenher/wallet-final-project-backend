@@ -11,12 +11,12 @@ const { userTransactions: ctrl } = require("../../controllers");
 const router = express.Router();
 
 router.post(
-  "/",
+  "/add",
   authenticate,
   validation(joiSchema),
   controllerWrapper(ctrl.add)
 );
 
-router.get("/", authenticate, controllerWrapper(ctrl.get));
+router.post("/get", authenticate, controllerWrapper(ctrl.get));
 
 module.exports = router;
