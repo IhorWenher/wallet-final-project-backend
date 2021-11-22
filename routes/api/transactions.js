@@ -17,8 +17,6 @@ router.post(
   controllerWrapper(ctrl.add)
 );
 
-router.get("/", authenticate, controllerWrapper(ctrl.getAll));
-
-router.get("/statistic", authenticate, controllerWrapper(ctrl.getByFilter));
+router.get("/", authenticate, controllerWrapper(ctrl.get));
 
 module.exports = router;
